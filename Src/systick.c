@@ -3,7 +3,7 @@
 
 static volatile uint32_t g_tick = 0;
 
-void systick_init(void)
+void Systick_Init_Default(void)
 {
     
     //Configure SysTick for 1ms tick
@@ -18,12 +18,12 @@ void SysTick_Handler(void)
 
 }
 
-uint32_t systick_get_time(void)
+uint32_t Systick_Get_Time(void)
 {
     return g_tick;
 }
 
-bool systick_has_elapsed(uint32_t start, uint32_t delay)
+bool Systick_Has_Elapsed(uint32_t start, uint32_t delay)
 {
     return (uint32_t)(g_tick - start) >= delay;
 }

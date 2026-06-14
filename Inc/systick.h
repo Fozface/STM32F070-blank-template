@@ -5,14 +5,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+void Systick_Init_Default(void);
 
-uint32_t systick_get_time(void);
+uint32_t Systick_Get_Time(void);
 
-bool systick_has_elapsed(uint32_t start, uint32_t delay);
+bool Systick_Has_Elapsed(uint32_t start, uint32_t delay);
 
-void systick_init(void);
 
-void systick_delay(uint32_t ms);
+
 
 
 
