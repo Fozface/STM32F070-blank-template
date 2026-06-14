@@ -1,0 +1,106 @@
+﻿# STM32F070F6P Bare-Metal GPIO Blink
+
+Minimal bare-metal firmware for the STM32F070F6Px Cortex-M0 microcontroller.
+
+The application configures GPIOA pin 1 and GPIOB pin 1 as push-pull outputs, then toggles both pins continuously with a simple software delay. The project is intentionally small and register-level: it uses CMSIS device headers directly instead of STM32 HAL.
+
+## Target
+
+- MCU family: STM32F0
+- Device define: `STM32F070xx`
+- Core: Arm Cortex-M0
+- Linker script: `STM32F070F6PX_FLASH.ld`
+- Startup file: `Startup/startup_stm32f070f6px.s`
+- Main outputs: `STM32F070F6P.elf`, `STM32F070F6P.hex`, and `STM32F070F6P.bin`
+
+## Firmware Behavior
+
+`Src/main.c` performs the following:
+
+1. Enables the GPIOB peripheral clock.
+2. Configures `PB1` as a general-purpose output.
+3. Enables the GPIOA peripheral clock.
+4. Configures `PA1` as a general-purpose output.
+5. Toggles `PA1` and `PB1` forever using a blocking delay loop.
+
+This is suitable as a first hardware bring-up or GPIO sanity-check project.
+
+## Repository Layout
+
+```text
+.
+|-- CMakeLists.txt
+|-- STM32F070F6PX_FLASH.ld
+|-- Inc/
+|-- Src/
+|   |-- main.c
+|   |-- syscalls.c
+|   `-- sysmem.c
+|-- Startup/
+|   `-- startup_stm32f070f6px.s
+`-- cmake/
+    `-- arm-gcc-toolchain.cmake
+```
+
+## Prerequisites
+
+- CMake 3.20 or newer
+- Ninja or another CMake generator
+- Arm GNU Toolchain for `arm-none-eabi`
+- STM32CubeF0 CMSIS package
+- OpenOCD with ST-LINK support, if flashing through the included VS Code tasks
+
+The current project files use local Windows paths:
+
+- Toolchain: `C:/arm-gcc/arm-none-eabi-14.3/bin`
+- CMSIS root: `C:/Users/tfaty/STM32Cube/Repository/STM32Cube_FW_F0_V1.11.6/Drivers/CMSIS`
+- OpenOCD: `C:/msys64/ucrt64/bin/openocd.exe`
+- OpenOCD scripts: `C:/msys64/ucrt64/share/openocd/scripts`
+
+Update these paths in `cmake/arm-gcc-toolchain.cmake`, `CMakeLists.txt`, and `.vscode/` files if your tools are installed elsewhere.
+
+## Configure
+
+From the repository root:
+
+```powershell
+cmake -S . -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=cmake/arm-gcc-toolchain.cmake
+```
+
+## Build
+
+```powershell
+cmake --build build
+```
+
+The post-build step generates:
+
+- `build/STM32F070F6P.elf`
+- `build/STM32F070F6P.hex`
+- `build/STM32F070F6P.bin`
+- `build/STM32F070F6P.map`
+
+## Flash With OpenOCD
+
+With an ST-LINK connected:
+
+```powershell
+openocd -s C:/msys64/ucrt64/share/openocd/scripts `
+  -f interface/stlink.cfg `
+  -f target/stm32f0x.cfg `
+  -c "program build/STM32F070F6P.elf verify reset exit"
+```
+
+The repository also includes VS Code task/debug configuration for OpenOCD and Cortex-Debug:
+
+- `Build (CMake all)`
+- `Flash (OpenOCD)`
+- `F070F6 Debug (OpenOCD + ST-LINK)`
+- `F070F6 Flash + Auto-Run`
+
+## Notes
+
+- The firmware uses direct register access through CMSIS headers.
+- No STM32 HAL or LL driver layer is required.
+- The delay loop is intentionally simple and is not timing-accurate.
+- Generated build artifacts should stay out of source control.
