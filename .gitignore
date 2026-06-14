@@ -1,0 +1,19 @@
+Ignore folders
+Debug/
+build/
+Ignore file types
+*.o
+*.elf
+*.bin
+Common STM32 ignore
+Debug/
+Release/
+build/
+*.o
+*.elf
+*.bin
+*.hex
+*.d
+.vscode/
+.DS_Store
+Thumbs.db
