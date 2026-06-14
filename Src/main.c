@@ -1,9 +1,15 @@
 
 #include "stm32f0xx.h"
 #include <stdint.h>
+#include "systick.h"
+
+int now = 0;
+#define delay_s 1000
 
 int main(void)
 {
+
+    Systick_Init_Default();
     // Enable GPIOB clock
     RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
 
@@ -11,26 +17,21 @@ int main(void)
     GPIOB->MODER &= ~(3 << (1 * 2));
     GPIOB->MODER |=  (1 << (1 * 2));
 
-        // Enable GPIOA clock
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-
-    // PA1 as output
-    GPIOA->MODER &= ~(3 << (1 * 2));
-    GPIOA->MODER |=  (1 << (1 * 2));
-
-    GPIOA->AFR[0] &= ~(0xF << (1 * 4));
 
 
+    GPIOB->ODR ^= (1 << 1);
+    
 
 
 
     while (1)
     {
-        // Toggle PB1
-        GPIOB->ODR ^= (1 << 1);
-        GPIOA->ODR ^= (1 << 1);
         
-        // Simple delay
-        for (volatile int i = 0; i < 1000000; i++);
+        if (Systick_Has_Elapsed(now, delay_s))
+        {
+            now = Systick_Get_Time();
+            
+            GPIOB->ODR ^= (1 << 1);
+        }
     }
 }
