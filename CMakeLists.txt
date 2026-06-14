@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(STM32F070F6P C ASM)
 
+
 # ---- CMSIS (MUST be F0, not F4) ----
 set(CMSIS_ROOT "C:/Users/tfaty/STM32Cube/Repository/STM32Cube_FW_F0_V1.11.6/Drivers/CMSIS")
 
