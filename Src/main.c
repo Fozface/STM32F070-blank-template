@@ -40,7 +40,7 @@ int main(void)
         {
             GPIOB->ODR = (1 << 1);
             LED_STATE = LED_ON;
-            delay = (delay_100ms * 2);
+            delay = (delay_100ms);
             last_trig = now;
             
         }
