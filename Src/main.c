@@ -7,6 +7,10 @@
 int led_tick = 0;
 int next_led_tick_count = 0;
 
+int now = 0;
+int last_trig = 0;
+int delay = 0;
+
 int main(void)
 {
 
@@ -22,20 +26,24 @@ int main(void)
 
     while (1)
     {
-        led_tick = Systick_Get_Time();
+        now = Systick_Get_Time();
 
-        if ((led_tick >= next_led_tick_count) && LED_STATE == LED_ON)
+        if (Systick_Has_Elapsed(last_trig, delay) && LED_STATE == LED_ON)
         {
 
             GPIOB->ODR = (0 << 1);
             LED_STATE = LED_OFF;
-            next_led_tick_count = Systick_Get_Time() + (delay_s + (delay_100ms * 5));
+            delay = (delay_s + (delay_100ms * 5));
+            last_trig = now;
         }
-        else if ((led_tick >= next_led_tick_count) && (LED_STATE == LED_OFF))
+        else if (Systick_Has_Elapsed(last_trig, delay) && (LED_STATE == LED_OFF))
         {
             GPIOB->ODR = (1 << 1);
             LED_STATE = LED_ON;
-            next_led_tick_count = Systick_Get_Time() + (delay_100ms * 1);
+            delay = (delay_100ms * 2);
+            last_trig = now;
+            
         }
     }
 }
+

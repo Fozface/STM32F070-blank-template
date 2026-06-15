@@ -16,4 +16,11 @@ typedef enum
 } LED_State;
 LED_State LED_STATE = LED_OFF;
 
+typedef struct {
+int On_Time;
+int Off_Time;
+
+}blink_t;
+
+
 #endif
