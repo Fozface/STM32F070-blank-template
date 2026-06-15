@@ -7,8 +7,6 @@
 int led_tick = 0;
 int next_led_tick_count = 0;
 
-
-
 int main(void)
 {
 
@@ -18,29 +16,26 @@ int main(void)
 
     // PB1 as output
     GPIOB->MODER &= ~(3 << (1 * 2));
-    GPIOB->MODER |=  (1 << (1 * 2));
-
-
+    GPIOB->MODER |= (1 << (1 * 2));
 
     GPIOB->ODR ^= (1 << 1);
-    
-
-
 
     while (1)
     {
         led_tick = Systick_Get_Time();
-        
+
         if ((led_tick >= next_led_tick_count) && LED_STATE == LED_ON)
         {
-            next_led_tick_count = Systick_Get_Time() + (delay_s + (delay_100ms * 5));
+
             GPIOB->ODR = (0 << 1);
             LED_STATE = LED_OFF;
-        }else if ((led_tick >= next_led_tick_count) && (LED_STATE == LED_OFF))
+            next_led_tick_count = Systick_Get_Time() + (delay_s + (delay_100ms * 5));
+        }
+        else if ((led_tick >= next_led_tick_count) && (LED_STATE == LED_OFF))
         {
-            next_led_tick_count = Systick_Get_Time() + (delay_100ms * 1);
             GPIOB->ODR = (1 << 1);
             LED_STATE = LED_ON;
+            next_led_tick_count = Systick_Get_Time() + (delay_100ms * 1);
         }
     }
 }
