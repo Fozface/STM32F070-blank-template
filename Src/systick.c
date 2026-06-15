@@ -1,5 +1,6 @@
 #include "systick.h"
 
+//this MCU uses a system clock of 8 MHz by default, so we can calculate the reload value for 1 ms ticks
 #ifndef SystemCoreClock
 #define SystemCoreClock 8000000
 #endif
@@ -10,7 +11,7 @@ static volatile uint32_t g_tick = 0;
 void Systick_Init_Default(void)
 {
     // Configure SysTick for 1 msecond delay
-    SysTick->LOAD = (SystemCoreClock/1000 - 1); // Assuming 8 MHz clock
+    SysTick->LOAD = (SystemCoreClock/1000 - 1); 
     SysTick->VAL = 0;         // Clear current value
     NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL);
     SysTick->CTRL =

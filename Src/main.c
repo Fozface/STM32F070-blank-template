@@ -1,10 +1,13 @@
 
 #include "stm32f0xx.h"
-#include <stdint.h>
 #include "systick.h"
 
-int now = 0;
-#define delay_s 1000
+#include "main.h"
+
+int led_tick = 0;
+int next_led_tick_count = 0;
+
+
 
 int main(void)
 {
@@ -26,12 +29,18 @@ int main(void)
 
     while (1)
     {
+        led_tick = Systick_Get_Time();
         
-        if (Systick_Has_Elapsed(now, delay_s))
+        if ((led_tick >= next_led_tick_count) && LED_STATE == LED_ON)
         {
-            now = Systick_Get_Time();
-            
-            GPIOB->ODR ^= (1 << 1);
+            next_led_tick_count = Systick_Get_Time() + (delay_s + (delay_100ms * 5));
+            GPIOB->ODR = (0 << 1);
+            LED_STATE = LED_OFF;
+        }else if ((led_tick >= next_led_tick_count) && (LED_STATE == LED_OFF))
+        {
+            next_led_tick_count = Systick_Get_Time() + (delay_100ms * 1);
+            GPIOB->ODR = (1 << 1);
+            LED_STATE = LED_ON;
         }
     }
 }
