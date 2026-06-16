@@ -4,12 +4,8 @@
 
 #include "main.h"
 
-int led_tick = 0;
-int next_led_tick_count = 0;
-
-int now = 0;
-int last_trig = 0;
-int delay = 0;
+int LED_last_trig = 0;
+int LED_delay = 0;
 
 int main(void)
 {
@@ -26,23 +22,20 @@ int main(void)
 
     while (1)
     {
-        now = Systick_Get_Time();
 
-        if (Systick_Has_Elapsed(last_trig, delay) && LED_STATE == LED_ON)
+        if (Systick_Has_Elapsed(LED_last_trig, LED_delay) && LED_STATE == LED_ON)
         {
-
             GPIOB->ODR = (0 << 1);
             LED_STATE = LED_OFF;
-            delay = (delay_s + (delay_100ms * 5));
-            last_trig = now;
+            LED_delay = (delay_s + (delay_100ms * 5));
+            LED_last_trig = Systick_Get_Time();
         }
-        else if (Systick_Has_Elapsed(last_trig, delay) && (LED_STATE == LED_OFF))
+        else if (Systick_Has_Elapsed(LED_last_trig, LED_delay) && (LED_STATE == LED_OFF))
         {
             GPIOB->ODR = (1 << 1);
             LED_STATE = LED_ON;
-            delay = (delay_100ms);
-            last_trig = now;
-            
+            LED_delay = (delay_100ms);
+            LED_last_trig = Systick_Get_Time();   
         }
     }
 }
