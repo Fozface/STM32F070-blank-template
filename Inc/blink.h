@@ -12,19 +12,10 @@ typedef enum
 
 } LED_STATE_T;
 
-typedef enum
-{
-    GPIO_A,
-    GPIO_B,
-    GPIO_C,
-    GPIO_D,
-    GPIO_E,
-    GPIO_F,
-
-} GPIO_PORT_T;
 
 typedef enum
 {
+    PIN_0,
     PIN_1,
     PIN_2,
     PIN_3,
@@ -37,7 +28,7 @@ typedef enum
     PIN_10,
 
 } GPIO_PIN_T;
-typedef struct 
+typedef struct
 {
     LED_STATE_T state;
     uint16_t on_time;
@@ -45,7 +36,7 @@ typedef struct
 
     uint32_t (*tick_source)(void);
 
-    GPIO_PORT_T port;
+    GPIO_TypeDef * port;
     GPIO_PIN_T pin;
 
     //=====non-user=======

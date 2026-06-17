@@ -1,5 +1,7 @@
 #include "systick.h"
 
+#include "stm32f030x6.h"
+
 //this MCU uses a system clock of 8 MHz by default, so we can calculate the reload value for 1 ms ticks
 #ifndef SystemCoreClock
 #define SystemCoreClock 8000000
