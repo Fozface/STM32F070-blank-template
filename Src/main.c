@@ -24,7 +24,7 @@ int main(void)
         {
             .state = LED_STATE_OFF,
             .on_time = delay_100ms,
-            .off_time = (delay_s * 2),
+            .off_time = (delay_s * 3),
             .tick_source = Systick_Get_Time,
             .port = GPIOB,
             .pin = PIN_1,
