@@ -18,7 +18,7 @@ int main(void)
     GPIOB->MODER &= ~(3 << (1 * 2));
     GPIOB->MODER |= (1 << (1 * 2));
 
-    GPIOB->ODR ^= (1 << 1);
+    GPIOB->ODR |= (1 << 1);
 
     BLINK_T heartbeat =
         {

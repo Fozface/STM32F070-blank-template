@@ -34,6 +34,7 @@ typedef struct
     uint16_t on_time;
     uint16_t off_time;
 
+    //tick source needs to have a function to get current value,
     uint32_t (*tick_source)(void);
 
     GPIO_TypeDef * port;
